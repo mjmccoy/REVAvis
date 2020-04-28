@@ -4,7 +4,7 @@
 ## Date: February 3, 2020 ##
 ############################
 
-# This is a Shiny web application that visualizes REVA output. For now, you can run the application by clicking
+# This is a Shiny application that visualizes REVA output. For now, you can run the application by clicking
 # the 'Run App' button above in Rstudio or by running 'Rscript app.R' in the terminal.
 
 # Load libraries
