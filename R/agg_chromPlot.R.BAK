@@ -1,0 +1,25 @@
+# Function agg_chromPlot
+
+agg_chromPlot <- function(data1, data2, chr, feature, mean_se = FALSE){
+  if(is.null(data1) || is.null(data2)){
+    return(NULL)
+  }
+  g <- rbind(data1, data2) %>%
+    subset(Chr %in% chr) %>%
+    group_by(Condition, Chr) %>%
+    filter(duplicated(Chr) | n()==1) %>%
+    mutate(group = gsub("\\_.*", "", Condition)) %>%
+    ggplot(aes_string(x = "BinStart/1000000", y = feature, col = "group")) +
+    ylab(feature) +
+    xlab("Genomics coordinates (Mb)") +
+    theme(panel.border = element_rect(colour = "black", fill = NA, size = 1)) +
+    geom_hline(yintercept = 0) +
+    theme_classic()
+  if(mean_se){
+    g <- g + stat_summary()
+  } else {
+    g <- g + geom_point()
+  }
+  ggplotly(g)
+  # return(g)
+}

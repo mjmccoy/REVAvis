@@ -1,0 +1,19 @@
+# Function chromPlot
+
+chromPlot <- function(data, chr, feature){
+  if (is.null(data)){
+    return(NULL)
+  }
+  g <- subset(data, Chr %in% chr) %>%
+    group_by(Condition, Chr) %>%
+    filter(duplicated(Chr) | n()==1) %>% # removes the first instance of duplicated values (summary of each chr)
+    ggplot(aes_string(x = "BinStart/1000000", y = feature, col = "Condition")) +
+    geom_point() +
+    ylab(feature) +
+    xlab("Genomic coordinates (Mb)") +
+    theme(panel.border = element_rect(colour = "black", fill = NA, size = 1)) +
+    theme_classic() +
+    geom_hline(yintercept = 0)
+  # ggplotly(g)
+  return(g)
+}

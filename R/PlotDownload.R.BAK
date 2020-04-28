@@ -1,0 +1,28 @@
+# Function PlotDownload
+
+PlotDownload <- function(condition, plotType, input.plot, width, height){
+  downloadHandler(
+    filename = function() {
+      paste(
+        condition,
+        '-',
+        plotType,
+        Sys.Date(),
+        '.pdf',
+        sep=''
+      )
+    },
+    content = function(file) {
+      pdf(
+        file,
+        bg = "white",
+        useDingbats = F,
+        width = width,
+        height = height
+      )
+      print(input.plot)
+      dev.off()
+    },
+    contentType = 'image/pdf'
+  )
+}
