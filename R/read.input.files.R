@@ -19,6 +19,7 @@ read.input.files <- function(file.list, condition, normalized){
     )
     data.df[, c((ncol(data.df) - 1), ncol(data.df))] <- NULL
     names(data.df) <- gsub(pattern = "\\__.*", "", names(data.df))
+    names(data.df)[1] <- ifelse(names(data.df)[1] == "Chromosome", "Chr", names(data.df)[1])
     if(normalized){
       for(i in 4:ncol(data.df)){
         data.df[2:nrow(data.df), i] <- (data.df[2:nrow(data.df), i]*1e6)/data.df[1, i]
