@@ -36,14 +36,14 @@ TwoDPlot <- function(data1, data2, condition1_name, condition2_name, chr, featur
     select(data2_feature = feature) %>%
     as.data.frame
   data1$data2_feature <- data2$data2_feature
-  g <- ggplot(data1) +
+  g <- ggplot(subset(data1, data1_feature > 0 | data2_feature > 0)) +
     # geom_point(aes(x = data1_feature, y = data2_feature, col = Chr, text = BinStart)) +
-    geom_point(aes(x = log10(data1_feature + 1), y = log10(data2_feature + 1), col = Chr, text = paste(Chr, BinStart, sep = ":"))) +
+    geom_point(aes(x = log2(data1_feature), y = log2(data2_feature), col = Chr, text = paste(Chr, BinStart, sep = ":"))) +
     # geom_point(aes(x = log10(data1_feature), y = log10(data2_feature), col = Chr, text = BinStart)) +
-    xlab(paste("log10(", condition1_name, " + 1)", sep = "")) +
-    ylab(paste("log10(", condition2_name, " + 1)", sep = "")) +
-    xlim(c(0, log10(max(data1[names(data1) %in% c("data1_feature", "data2_feature")]) + 1))) +
-    ylim(c(0, log10(max(data1[names(data1) %in% c("data1_feature", "data2_feature")]) + 1))) +
+    xlab(paste("log2(", condition1_name, ")", sep = "")) +
+    ylab(paste("log2(", condition2_name, ")", sep = "")) +
+    xlim(c(0, log2(max(data1[names(data1) %in% c("data1_feature", "data2_feature")])))) +
+    ylim(c(0, log2(max(data1[names(data1) %in% c("data1_feature", "data2_feature")])))) +
     # xlim(c(0, log10(max(data1[names(data1) %in% c("data1_feature", "data2_feature")])))) +
     # ylim(c(0, log10(max(data1[names(data1) %in% c("data1_feature", "data2_feature")])))) +
     # scale_x_log10() +
@@ -52,8 +52,8 @@ TwoDPlot <- function(data1, data2, condition1_name, condition2_name, chr, featur
     geom_abline(linetype = "dashed") +
     theme(panel.border = element_rect(colour = "black", fill = NA, size = 1)) +
     theme_classic() +
-    geom_text(x = log10(max(data1[names(data1) %in% c("data1_feature", "data2_feature")]) + 1)/10,
-              y = log10(max(data1[names(data1) %in% c("data1_feature", "data2_feature")]) + 1),
+    geom_text(x = log2(max(data1[names(data1) %in% c("data1_feature", "data2_feature")]))/10,
+              y = log2(max(data1[names(data1) %in% c("data1_feature", "data2_feature")])),
               label = corr_eqn(data1$data1_feature, data1$data2_feature),
               parse = FALSE)
     # geom_text(x = log10(max(data1$data1_feature))/10,

@@ -265,7 +265,7 @@ server <- function(input, output) {
       ),
       checkboxInput(
         inputId = "log_scale_1",
-        label = "log10(x + 1)",
+        label = "log2(x)",
         value = TRUE),
       numericInput(
         inputId = 'plot_height_1',
@@ -307,7 +307,7 @@ server <- function(input, output) {
       ),
       checkboxInput(
         inputId = "log_scale_2",
-        label = "log10(x + 1)",
+        label = "log2(x)",
         value = TRUE
       ),
       numericInput(
@@ -347,7 +347,7 @@ server <- function(input, output) {
       ),
       checkboxInput(
         inputId = "log_scale_3",
-        label = "log10(x + 1)",
+        label = "log2(x)",
         value = TRUE
       ),
       numericInput(

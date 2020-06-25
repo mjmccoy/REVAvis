@@ -17,29 +17,29 @@ chromPlot <- function(data, chr, feature, norm_feature = "", log_scale = NULL){
       select(BinStart = BinStart, y.data = feature, Chr = Chr, Condition = Condition) %>%
       as.data.frame
   }
-  g <- ggplot(data.df) +
+  g <- ggplot(subset(data.df, y.data > 0)) +
     xlab("Genomic coordinates (Mb)") +
     theme(panel.border = element_rect(colour = "black", fill = NA, size = 1)) +
     theme_classic() +
     geom_hline(yintercept = 0)
   if(log_scale){
     g <- g +
-      geom_point(aes(x = BinStart/1000000, y = log10(y.data + 1), col = Chr, shape = Condition)) +
+      geom_point(aes(x = BinStart/1000000, y = log2(y.data), col = Chr, shape = Condition)) +
       ylab(
         ifelse(
           norm_feature == "",
           paste(
-            "log10(",
+            "log2(",
             feature,
-            " + 1)",
+            ")",
             sep = ""
           ),
           paste(
-            "log10(",
+            "log2(",
             feature,
             "/",
             norm_feature,
-            " + 1)",
+            ")",
             sep = ""
           )
         )

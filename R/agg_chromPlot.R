@@ -20,28 +20,28 @@ agg_chromPlot <- function(data1, data2, chr, feature, norm_feature = "", mean_se
     data.df$y.data <- data.df$y.data/data.df$y.norm.feature
   }
   if(log_scale){
-    g <- ggplot(data.df, aes(x = BinStart/1000000, y = log10(y.data + 1), col = group)) +
+    g <- ggplot(subset(data.df, y.data > 0), aes(x = BinStart/1000000, y = log2(y.data), col = group)) +
       ylab(
         ifelse(
           norm_feature == "",
           paste(
-            "log10(",
+            "log2(",
             feature,
-            " + 1)",
+            ")",
             sep = ""
           ),
           paste(
-            "log10(",
+            "log2(",
             feature,
             "/",
             norm_feature,
-            " + 1)",
+            ")",
             sep = ""
           )
         )
       )
   } else {
-    g <- ggplot(data.df, aes(x = BinStart/1000000, y = y.data, col = group)) +
+    g <- ggplot(subset(data.df, y.data > 0), aes(x = BinStart/1000000, y = y.data, col = group)) +
       ylab(
         ifelse(
           norm_feature == "",
