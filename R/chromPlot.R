@@ -1,4 +1,4 @@
-# Function chromPlot
+# Function chromPlot. This is a test of branching.
 
 chromPlot <- function(data, chr, feature, norm_feature = "", log_scale = NULL){
   if(is.null(data)){
