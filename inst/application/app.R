@@ -11,11 +11,14 @@
 library(shiny)
 library(waiter)
 library(ggplot2)
-library(dplyr)
+library(tidyverse)
+library(Gviz)
+library(BSgenome.Hsapiens.UCSC.hg38)
 # library(plotly)
 # library(DT) # overwrites shiny's renderDataTable and dataTableOutput to work properly
 
 # Load functions
+source(file = "../../R/MainPlot.R")
 source(file = "../../R/read.input.files.R")
 source(file = "../../R/chromPlot.R")
 source(file = "../../R/agg_chromPlot.R")
@@ -68,6 +71,19 @@ ui <- navbarPage("REVA Visualization",
                           fluidRow(
                             column(4,
                               submitButton("Submit")
+                            )
+                          )
+                 ),
+                 tabPanel("Main Plot",
+                          fluidRow(
+                            column(2,
+                                   uiOutput("render_ui_0"),
+                                   submitButton("Submit")
+                            ),
+                            column(10,
+                                   use_waiter(),
+                                   plotOutput("MainPlot_plot"),
+                                   uiOutput("render_download_MainPlot")
                             )
                           )
                  ),
@@ -157,6 +173,7 @@ server <- function(input, output) {
 
   waiter <- Waiter$new(
     id = c(
+      "MainPlot",
       "condition1_chromPlot",
       "condition2_chromPlot",
       "agg_chromPlot_plot",
@@ -195,10 +212,13 @@ server <- function(input, output) {
   observe({
     vals$condition1_name <- input$condition1_name
     vals$condition2_name <- input$condition2_name
+    vals$chr_0 <- as.factor(input$chr_0)
     vals$chr_1 <- as.factor(input$chr_1)
     vals$chr_2 <- as.factor(input$chr_2)
     vals$chr_3 <- as.factor(input$chr_3)
     vals$chr_4 <- as.factor(input$chr_4)
+    vals$start_0 <- input$start_0
+    vals$end_0 <- input$end_0
     vals$feature_1 <- input$feature_1
     vals$feature_2 <- input$feature_2
     vals$feature_3 <- input$feature_3
@@ -207,10 +227,13 @@ server <- function(input, output) {
     vals$norm_feature_2 <- input$norm_feature_2
     vals$norm_feature_3 <- input$norm_feature_3
     vals$norm_feature_4 <- input$norm_feature_4
+    vals$log_scale_0 <- input$log_scale_0
     vals$log_scale_1 <- input$log_scale_1
     vals$log_scale_2 <- input$log_scale_2
     vals$log_scale_3 <- input$log_scale_3
     vals$mean_se <- input$mean_se
+    vals$plot_height_0 <- input$plot_height_0
+    vals$plot_width_0 <- input$plot_width_0
     vals$plot_height_1 <- input$plot_height_1
     vals$plot_width_1 <- input$plot_width_1
     vals$plot_height_2 <- input$plot_height_2
@@ -246,6 +269,48 @@ server <- function(input, output) {
   })
 
   # Render UI
+  output$render_ui_0 <- renderUI({
+    list(
+      selectInput(
+        inputId = "chr_0",
+        label = "Chromosome name:",
+        choices = unique(as.character(condition1_data()$Chr))
+      ),
+      numericInput(
+        inputId = 'start_0',
+        label = 'start (bp)',
+        value = 1,
+        min = 1,
+        max = Inf
+      ),
+      numericInput(
+        inputId = 'end_0',
+        label = 'end (bp)',
+        value = Inf,
+        min = 1,
+        max = Inf
+      ),
+      checkboxInput(
+        inputId = "log_scale_0",
+        label = "log2(x)",
+        value = TRUE),
+      numericInput(
+        inputId = 'plot_height_0',
+        label = 'Download plot height (in)',
+        value = 3,
+        min = 1,
+        max = 48
+      ),
+      numericInput(
+        inputId = 'plot_width_0',
+        label = 'Download plot width (in)',
+        value = 8,
+        min = 1,
+        max = 48
+      )
+    )
+  })
+
   output$render_ui_1 <- renderUI({
     list(
       selectInput(
@@ -403,6 +468,36 @@ server <- function(input, output) {
   ###########
   ## Plots ##
   ###########
+
+  # MainPlot
+  # MainPlot_plot <- reactive({
+  #   req(vals$chr_0)
+  #   p <- MainPlot(
+  #     data = condition1_data(),
+  #     chr = vals$chr_0,
+  #     log_scale = vals$log_scale_0
+  #   )
+  # })
+
+  # output$MainPlot_plot <- renderPlot({
+  #   waiter$show()
+  #   Sys.sleep(1)
+  #   print(MainPlot_plot())
+  # })
+
+  output$MainPlot_plot <- renderPlot({
+    req(vals$chr_0)
+    waiter$show()
+    Sys.sleep(1)
+    MainPlot(
+      data = condition1_data(),
+      data2 = condition2_data(),
+      chr = vals$chr_0,
+      start = vals$start_0,
+      end = vals$end_0,
+      log_scale = vals$log_scale_0
+    )
+  })
 
   # condition1_chromPlot
   condition1_chromPlot <- reactive({
