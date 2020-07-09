@@ -2,7 +2,15 @@
 Visualization Software for REVAvis
 
 ## Install dependencies
-```install.packages(c("shiny", "waiter", "ggplot2", "dplyr"))```
+```
+install.packages(c("shiny", "waiter", "ggplot2", "dplyr", "tidyverse"))
+
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("Gviz")
+BiocManager::install("BSgenome.Hsapiens.UCSC.hg38")
+```
 
 ## Install REVAvis
 Clone REVAvis from GitHub:
