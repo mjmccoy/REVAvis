@@ -286,7 +286,7 @@ server <- function(input, output) {
       numericInput(
         inputId = 'end_0',
         label = 'end (bp)',
-        value = Inf,
+        value = 100000,
         min = 1,
         max = Inf
       ),

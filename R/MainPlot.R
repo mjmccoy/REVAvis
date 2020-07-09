@@ -56,7 +56,8 @@ MainPlot <- function(data, data2 = NULL, gen = "hg38", chr = NULL, start, end, l
 
   dtrack <- DataTrack(data = REVA2[,-c(1:4)], start = REVA2$start,
                       end = REVA2$end, chromosome = chr, genome = gen,
-                      name = "REVA", groups = unique(REVA1$condition))
+                      name = "REVA", groups = unique(REVA1$condition),
+                      na.rm = TRUE)
 
   if(!is.null(data2)){
     data2.df <- subset(data2, Chr %in% chr) %>%
@@ -91,7 +92,8 @@ MainPlot <- function(data, data2 = NULL, gen = "hg38", chr = NULL, start, end, l
 
     dtrack2 <- DataTrack(data = REVA4[,-c(1:4)], start = REVA4$start,
                          end = REVA4$end, chromosome = chr, genome = gen,
-                         name = "REVA2", groups = unique(REVA3$condition))
+                         name = "REVA2", groups = unique(REVA3$condition),
+                         na.rm = TRUE)
   }
 
   strack <- SequenceTrack(Hsapiens, chromosome = chr)
