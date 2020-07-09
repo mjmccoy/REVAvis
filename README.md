@@ -3,7 +3,7 @@ Visualization Software for REVAvis
 
 ## Install dependencies
 ```
-install.packages(c("shiny", "waiter", "ggplot2", "dplyr", "tidyverse"))
+install.packages(c("shiny", "waiter", "ggplot2", "dplyr", "tidyverse", "XML"))
 
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
