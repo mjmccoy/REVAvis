@@ -15,6 +15,9 @@ library(dplyr)
 # library(plotly)
 # library(DT) # overwrites shiny's renderDataTable and dataTableOutput to work properly
 
+# set default browser
+options(browser = "/usr/bin/firefox")
+
 # Load functions
 source(file = "../../R/read.input.files.R")
 source(file = "../../R/chromPlot.R")
