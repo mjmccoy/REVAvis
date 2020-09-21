@@ -202,6 +202,8 @@ server <- function(input, output) {
     vals$chr_2 <- as.factor(input$chr_2)
     vals$chr_3 <- as.factor(input$chr_3)
     vals$chr_4 <- as.factor(input$chr_4)
+    vals$start_1 <- as.factor(input$start_1)
+    vals$end_1 <- as.factor(input$end_1)
     vals$feature_1 <- input$feature_1
     vals$feature_2 <- input$feature_2
     vals$feature_3 <- input$feature_3
@@ -255,6 +257,20 @@ server <- function(input, output) {
         inputId = "chr_1",
         label = "Chromosome name:",
         choices = unique(as.character(condition1_data()$Chr))
+      ),
+      numericInput(
+        inputId = 'start_1',
+        label = 'Chromosome start',
+        value = min(condition1_data()$BinStart),
+        min = 0,
+        max = Inf
+      ),
+      numericInput(
+        inputId = 'end_1',
+        label = 'Chromosome end',
+        value = max(condition1_data()$BinStart) + max(condition1_data()$BinLength),
+        min = 1,
+        max = Inf
       ),
       selectInput(
         inputId = 'feature_1',
@@ -413,6 +429,8 @@ server <- function(input, output) {
     p <- chromPlot(
       data = condition1_data(),
       chr = vals$chr_1,
+      start = vals$start_1,
+      end = vals$end_1,
       feature = vals$feature_1,
       norm_feature = vals$norm_feature_1,
       log_scale = vals$log_scale_1
@@ -431,6 +449,8 @@ server <- function(input, output) {
      p <- chromPlot(
        data = condition2_data(),
        chr = vals$chr_1,
+       start = vals$start_1,
+       end = vals$end_1,
        feature = vals$feature_1,
        norm_feature = vals$norm_feature_1,
        log_scale = vals$log_scale_1
