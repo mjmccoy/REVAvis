@@ -22,7 +22,7 @@ source(file = "../../R/agg_chromPlot.R")
 source(file = "../../R/ManhattanPlot.R")
 source(file = "../../R/2DPlot.R")
 
-# Set default browser
+# Set default browser.
 options(browser="/usr/bin/firefox")
 
 # Define UI for application
