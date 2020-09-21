@@ -94,62 +94,62 @@ ui <- navbarPage("REVA Visualization",
                                    uiOutput("render_download_condition2_chromPlot")
                             )
                           )
-                 ),
-                 tabPanel("Aggregate Plots",
-                          fluidRow(
-                            column(2,
-                                   uiOutput("render_ui_2"),
-                                   submitButton("Submit")
-                            ),
-                            column(10,
-                                   use_waiter(),
-                                   plotOutput("agg_chromPlot_plot"),
-                                   uiOutput("render_download_agg_chromPlot_plot")
-                            )
-                          )
-                 ),
-                 tabPanel("Manhattan Plots",
-                          fluidRow(
-                            column(2,
-                                   uiOutput("render_ui_3"),
-                                   submitButton("Submit")
-                            ),
-                            column(10,
-                                   use_waiter(),
-                                   plotOutput("condition1_ManhattanPlot"),
-                                   uiOutput("render_download_condition1_ManhattanPlot")
-                            )
-                          ),
-                          fluidRow(
-                            column(2),
-                            column(10,
-                                   use_waiter(),
-                                   plotOutput("condition2_ManhattanPlot"),
-                                   uiOutput("render_download_condition2_ManhattanPlot")
-                            )
-                          ),
-                          fluidRow(
-                            column(2),
-                            column(10,
-                                   use_waiter(),
-                                   plotOutput("ManhattanPlot_ratio"),
-                                   uiOutput("render_download_ManhattanPlot_ratio")
-                            )
-                          )
-                 ),
-                 tabPanel("2D Plots",
-                          fluidRow(
-                            column(2,
-                                   uiOutput("render_ui_4"),
-                                   submitButton("Submit")
-                            ),
-                            column(5,
-                                   use_waiter(),
-                                   plotOutput("TwoDPlot_plot"),
-                                   uiOutput("render_download_TwoDPlot_plot")
-                            )
-                          )
                  )
+                 # tabPanel("Aggregate Plots",
+                 #          fluidRow(
+                 #            column(2,
+                 #                   uiOutput("render_ui_2"),
+                 #                   submitButton("Submit")
+                 #            ),
+                 #            column(10,
+                 #                   use_waiter(),
+                 #                   plotOutput("agg_chromPlot_plot"),
+                 #                   uiOutput("render_download_agg_chromPlot_plot")
+                 #            )
+                 #          )
+                 # ),
+                 # tabPanel("Manhattan Plots",
+                 #          fluidRow(
+                 #            column(2,
+                 #                   uiOutput("render_ui_3"),
+                 #                   submitButton("Submit")
+                 #            ),
+                 #            column(10,
+                 #                   use_waiter(),
+                 #                   plotOutput("condition1_ManhattanPlot"),
+                 #                   uiOutput("render_download_condition1_ManhattanPlot")
+                 #            )
+                 #          ),
+                 #          fluidRow(
+                 #            column(2),
+                 #            column(10,
+                 #                   use_waiter(),
+                 #                   plotOutput("condition2_ManhattanPlot"),
+                 #                   uiOutput("render_download_condition2_ManhattanPlot")
+                 #            )
+                 #          ),
+                 #          fluidRow(
+                 #            column(2),
+                 #            column(10,
+                 #                   use_waiter(),
+                 #                   plotOutput("ManhattanPlot_ratio"),
+                 #                   uiOutput("render_download_ManhattanPlot_ratio")
+                 #            )
+                 #          )
+                 # ),
+                 # tabPanel("2D Plots",
+                 #          fluidRow(
+                 #            column(2,
+                 #                   uiOutput("render_ui_4"),
+                 #                   submitButton("Submit")
+                 #            ),
+                 #            column(5,
+                 #                   use_waiter(),
+                 #                   plotOutput("TwoDPlot_plot"),
+                 #                   uiOutput("render_download_TwoDPlot_plot")
+                 #            )
+                 #          )
+                 # )
 )
 
 # Define server logic
@@ -216,6 +216,7 @@ server <- function(input, output) {
     vals$log_scale_2 <- input$log_scale_2
     vals$log_scale_3 <- input$log_scale_3
     vals$mean_se <- input$mean_se
+    vals$point_size_1 <- input$point_size_1
     vals$plot_height_1 <- input$plot_height_1
     vals$plot_width_1 <- input$plot_width_1
     vals$plot_height_2 <- input$plot_height_2
@@ -261,14 +262,16 @@ server <- function(input, output) {
       numericInput(
         inputId = 'start_1',
         label = 'Chromosome start',
-        value = min(condition1_data()$BinStart),
+        #value = min(condition1_data()$BinStart),
+        value = NA,
         min = 0,
         max = Inf
       ),
       numericInput(
         inputId = 'end_1',
         label = 'Chromosome end',
-        value = max(condition1_data()$BinStart) + max(condition1_data()$BinLength),
+        #value = max(condition1_data()$BinStart) + max(condition1_data()$BinLength),
+        value = NA,
         min = 1,
         max = Inf
       ),
@@ -285,7 +288,15 @@ server <- function(input, output) {
       checkboxInput(
         inputId = "log_scale_1",
         label = "log2(x)",
-        value = TRUE),
+        value = TRUE
+      ),
+      numericInput(
+        inputId = 'point_size_1',
+        label = 'Point size (0.1-10.0)',
+        value = 1,
+        min = 0.1,
+        max = 10
+      ),
       numericInput(
         inputId = 'plot_height_1',
         label = 'Download plot height (in)',
@@ -433,7 +444,8 @@ server <- function(input, output) {
       end = vals$end_1,
       feature = vals$feature_1,
       norm_feature = vals$norm_feature_1,
-      log_scale = vals$log_scale_1
+      log_scale = vals$log_scale_1,
+      point_size = vals$point_size_1
     )
   })
 
@@ -453,7 +465,8 @@ server <- function(input, output) {
        end = vals$end_1,
        feature = vals$feature_1,
        norm_feature = vals$norm_feature_1,
-       log_scale = vals$log_scale_1
+       log_scale = vals$log_scale_1,
+       point_size = vals$point_size_1
      )
    })
 
