@@ -221,7 +221,6 @@ server <- function(input, output) {
     vals$point_size_3 <- input$point_size_3
     vals$point_size_4 <- input$point_size_4
     vals$point_color_1 <- input$point_color_1
-    vals$point_color_2 <- input$point_color_2
     vals$text_size_1 <- input$text_size_1
     vals$text_size_2 <- input$text_size_2
     vals$text_size_3 <- input$text_size_3
@@ -308,13 +307,7 @@ server <- function(input, output) {
       ),
       selectInput(
         inputId = 'point_color_1',
-        label = 'Condition 1 color',
-        choices = colors(),
-        selected = "red3"
-      ),
-      selectInput(
-        inputId = 'point_color_2',
-        label = 'Condition 2 color',
+        label = 'Point color',
         choices = colors(),
         selected = "black"
       ),
@@ -374,18 +367,6 @@ server <- function(input, output) {
         value = 2,
         min = 0.1,
         max = 10
-      ),
-      selectInput(
-        inputId = 'point_color_1',
-        label = 'Color 1 (conditions are alphabetically ordered)',
-        choices = colors(),
-        selected = "red3"
-      ),
-      selectInput(
-        inputId = 'point_color_2',
-        label = 'Color 2 (conditions are alphabetically ordered)',
-        choices = colors(),
-        selected = "black"
       ),
       numericInput(
         inputId = 'text_size_2',
@@ -551,7 +532,7 @@ server <- function(input, output) {
        norm_feature = vals$norm_feature_1,
        log_scale = vals$log_scale_1,
        point_size = vals$point_size_1,
-       point_color = vals$point_color_2,
+       point_color = vals$point_color_1,
        text_size = vals$text_size_1
      )
    })
@@ -573,8 +554,6 @@ server <- function(input, output) {
        norm_feature = vals$norm_feature_2,
        mean_se = vals$mean_se,
        log_scale = vals$log_scale_2,
-       point_color_1 = vals$point_color_1,
-       point_color_2 = vals$point_color_2,
        point_size = vals$point_size_2,
        text_size = vals$text_size_2
      )

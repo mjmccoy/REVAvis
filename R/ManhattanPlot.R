@@ -7,6 +7,8 @@ ManhattanPlot <- function(
   feature,
   norm_feature = "",
   log_scale = FALSE,
+  point_size,
+  text_size,
   condition1_name = NULL,
   condition2_name = NULL){
   if(is.null(data)){
@@ -56,10 +58,13 @@ ManhattanPlot <- function(
     theme(panel.border = element_rect(colour = "black", fill = NA, size = 1)) +
     geom_hline(yintercept = 0) +
     theme_classic() +
-    theme(axis.ticks = element_blank(), axis.text.x = element_blank())
+    theme(
+      axis.ticks = element_blank(),
+      axis.text.x = element_blank(),
+      text = element_text(size = text_size))
   if(log_scale){
     g <- g +
-      geom_point(aes(x = Feature, y = log2(y.data), col = Chr, shape = Condition)) +
+      geom_point(aes(x = Feature, y = log2(y.data), col = Chr, shape = Condition), size = point_size) +
       ylab(
         ifelse(
           norm_feature == "",
@@ -81,7 +86,7 @@ ManhattanPlot <- function(
       )
   } else {
     g <- g +
-      geom_point(aes(x = Feature, y = y.data, col = Chr, shape = Condition)) +
+      geom_point(aes(x = Feature, y = y.data, col = Chr, shape = Condition), size = point_size) +
       ylab(
         ifelse(
           norm_feature == "",

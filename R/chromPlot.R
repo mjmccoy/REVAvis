@@ -1,6 +1,16 @@
 # Function chromPlot
 
-chromPlot <- function(data, chr, start, end, feature, norm_feature = "", log_scale = NULL, point_size){
+chromPlot <- function(
+  data,
+  chr,
+  start,
+  end,
+  feature,
+  norm_feature = "",
+  log_scale = NULL,
+  point_size,
+  point_color,
+  text_size){
 
   if(is.null(data)){
     return(NULL)
@@ -35,20 +45,24 @@ chromPlot <- function(data, chr, start, end, feature, norm_feature = "", log_sca
     )
   }
 
-  g <- ggplot(subset(data.df, y.data > 0)) +
+  g <- subset(data.df, y.data > 0) %>%
+    ggplot() +
     xlab("Genomic coordinates (Mb)") +
     theme(panel.border = element_rect(colour = "black", fill = NA)) +
     theme_classic() +
-    geom_hline(yintercept = 0)
+    geom_hline(yintercept = 0) +
+    theme(text = element_text(size = text_size)) +
+    ggtitle(label = chr)
 
   if(log_scale){
     g <- g +
       geom_point(
         aes(x = BinStart/1000000,
             y = log2(y.data),
-            col = Chr,
             shape = Condition),
-        size = point_size) +
+        size = point_size,
+        col = point_color,
+      ) +
       ylab(
         ifelse(
           norm_feature == "",

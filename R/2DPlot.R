@@ -1,6 +1,15 @@
 # Function TwoDPlot
 
-TwoDPlot <- function(data1, data2, condition1_name, condition2_name, chr, feature, norm_feature = ""){
+TwoDPlot <- function(
+  data1,
+  data2,
+  condition1_name,
+  condition2_name,
+  chr,
+  feature,
+  norm_feature = "",
+  point_size,
+  text_size){
   # for (i in c(data1, data2, chr, feature)){
   #   if(is.null(i)){
   #     return(NULL)
@@ -38,7 +47,13 @@ TwoDPlot <- function(data1, data2, condition1_name, condition2_name, chr, featur
   data1$data2_feature <- data2$data2_feature
   g <- ggplot(subset(data1, data1_feature > 0 | data2_feature > 0)) +
     # geom_point(aes(x = data1_feature, y = data2_feature, col = Chr, text = BinStart)) +
-    geom_point(aes(x = log2(data1_feature), y = log2(data2_feature), col = Chr, text = paste(Chr, BinStart, sep = ":"))) +
+    geom_point(
+      aes(
+        x = log2(data1_feature),
+        y = log2(data2_feature),
+        col = Chr,
+        text = paste(Chr, BinStart, sep = ":")),
+      size = point_size) +
     # geom_point(aes(x = log10(data1_feature), y = log10(data2_feature), col = Chr, text = BinStart)) +
     xlab(paste("log2(", condition1_name, ")", sep = "")) +
     ylab(paste("log2(", condition2_name, ")", sep = "")) +
@@ -50,7 +65,7 @@ TwoDPlot <- function(data1, data2, condition1_name, condition2_name, chr, featur
     # scale_y_log10() +
     # coord_fixed() +
     geom_abline(linetype = "dashed") +
-    theme(panel.border = element_rect(colour = "black", fill = NA, size = 1)) +
+    theme(panel.border = element_rect(colour = "black", fill = NA, size = 1), text = element_text(size = text_size)) +
     theme_classic() +
     geom_text(x = log2(max(data1[names(data1) %in% c("data1_feature", "data2_feature")]))/10,
               y = log2(max(data1[names(data1) %in% c("data1_feature", "data2_feature")])),

@@ -1,6 +1,17 @@
 # Function agg_chromPlot
 
-agg_chromPlot <- function(data1, data2, chr, feature, norm_feature = "", mean_se = FALSE, log_scale = NULL){
+agg_chromPlot <- function(
+  data1,
+  data2,
+  chr,
+  feature,
+  norm_feature = "",
+  mean_se = FALSE,
+  log_scale = NULL,
+  point_color_1,
+  point_color_2,
+  point_size,
+  text_size){
   if(is.null(data1) || is.null(data2)){
     return(NULL)
   }
@@ -56,8 +67,9 @@ agg_chromPlot <- function(data1, data2, chr, feature, norm_feature = "", mean_se
   }
   g <- g +
     xlab("Genomics coordinates (Mb)") +
-    theme(panel.border = element_rect(colour = "black", fill = NA, size = 1)) +
+    theme(panel.border = element_rect(colour = "black", fill = NA, size = 1), text = element_text(size = text_size)) +
     geom_hline(yintercept = 0) +
+    scale_color_manual(values = c(point_color_1, point_color_2)) +
     theme_classic()
   if(mean_se){
     g <- g + stat_summary()
