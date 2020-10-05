@@ -61,8 +61,7 @@ chromPlot <- function(
             y = log2(y.data),
             shape = Condition),
         size = point_size,
-        col = point_color,
-      ) +
+        col = point_color) +
       ylab(
         ifelse(
           norm_feature == "",
@@ -87,8 +86,8 @@ chromPlot <- function(
       geom_point(
         aes(x = BinStart/1000000,
             y = y.data,
-            col = Chr,
             shape = Condition),
+        col = point_color,
         size = point_size) +
       ylab(
         ifelse(
