@@ -12,6 +12,7 @@ library(shiny)
 library(waiter)
 library(ggplot2)
 library(dplyr)
+library(ggrepel)
 # library(plotly)
 # library(DT) # overwrites shiny's renderDataTable and dataTableOutput to work properly
 

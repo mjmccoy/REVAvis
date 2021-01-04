@@ -7,29 +7,55 @@ chromPlot <- function(
   end,
   feature,
   norm_feature = "",
-  log_scale = NULL,
+  log_scale = F,
   point_size,
   point_color,
-  text_size){
+  text_size,
+  genes = c("TUBB8", "DIP2C"),
+  FeatureFile = TRUE){
 
   if(is.null(data)){
     return(NULL)
   }
 
-  data.df <- subset(data, Chr %in% chr) %>%
-    group_by(Condition, Chr) %>%
-    filter(duplicated(Chr) | n()==1) # removes the first instance of duplicated values (summary of each chr)
-
-  if(norm_feature != ""){
-    data.df <- data.df %>%
-      select(BinStart = BinStart, y.data = feature, y.norm.data = norm_feature, Chr = Chr, Condition = Condition) %>%
-      as.data.frame
-    data.df$y.data <- data.df$y.data/data.df$y.norm.data
+  if(FeatureFile){
+    data.df <- subset(data, Chr %in% chr)
   } else {
-    data.df <- data.df %>%
-      select(BinStart = BinStart, y.data = feature, Chr = Chr, Condition = Condition) %>%
+    data.df <- subset(data, Chr %in% chr) %>%
+      group_by(Condition, Chr) %>%
+      filter(duplicated(Chr) | n()==1) %>% # removes the first instance of duplicated values (summary of each chr)
       as.data.frame
   }
+
+  if(norm_feature != ""){
+    # data.df <- data.df %>%
+    #   select(
+    #     BinStart = BinStart,
+    #     y.data = feature,
+    #     y.norm.data = norm_feature,
+    #     Chr = Chr,
+    #     Condition = Condition) %>%
+    #   as.data.frame
+    # data.df$y.data <- data.df$y.data/data.df$y.norm.data
+
+    #data.df <- data.df %>% mutate(y.data = feature/norm_feature) %>% as.data.frame()
+    data.df$y.data <- data.df[feature][,1]/data.df[norm_feature][,1]
+  } else {
+    # data.df <- data.df %>%
+    #   select(
+    #     BinStart = BinStart,
+    #     y.data = feature,
+    #     Chr = Chr,
+    #     Condition = Condition)
+
+    #data.df <- data.df %>% mutate(y.data = feature) %>% as.data.frame()
+    data.df$y.data <- data.df[feature][,1]
+  }
+
+  # if(labels & FeatureFile){
+  #   data.df$labels <- attribute_labels
+  #   cat(file=stderr(), "HELP")
+  # }
 
   if(!is.na(start)){
     data.df <- subset(
@@ -100,6 +126,24 @@ chromPlot <- function(
           )
         )
       )
+  }
+
+  #genes <- c("PRIM2", "RGPD1")
+
+  if(!is.null(genes) & log_scale){
+    g <- g + geom_text_repel(
+      data = subset(g$data, gene %in% genes),
+      aes(
+        x = BinStart/1000000,
+        y = log2(y.data),
+        label = gene))
+  } else if(!is.null(genes) & !log_scale){
+    g <- g + geom_text_repel(
+      data = subset(g$data, gene %in% genes),
+      aes(
+        x = BinStart/1000000,
+        y = y.data,
+        label = gene))
   }
   # ggplotly(g)
   return(g)
