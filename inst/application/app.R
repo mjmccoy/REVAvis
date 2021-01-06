@@ -42,7 +42,7 @@ ui <- navbarPage("REVA Visualization",
                                 inputId = "condition1_name",
                                 label = "Name for Condition 1",
                                 value = "Condition1"),
-                              checkboxInput("condition1_norm", "RPM normalize", TRUE)
+                              checkboxInput("condition1_norm", "RPM normalize (for each feature individually, reads/[(total reads)/1e6])", TRUE)
                             )),
                             # Output Condition 1 file names:
                             column(4,
@@ -62,7 +62,7 @@ ui <- navbarPage("REVA Visualization",
                                 inputId = "condition2_name",
                                 label = "Name for Condition 2",
                                 value = "Condition2"),
-                              checkboxInput("condition2_norm", "RPM normalize", TRUE)
+                              checkboxInput("condition2_norm", "RPM normalize (for each feature individually, reads/[(total reads)/1e6])", TRUE)
                             )),
                             # Outout Condition 2 file names:
                             column(4,
@@ -235,6 +235,14 @@ server <- function(input, output) {
     vals$plot_width_3 <- input$plot_width_3
     vals$plot_height_4 <- input$plot_height_4
     vals$plot_width_4 <- input$plot_width_4
+    vals$genes_1 <- input$genes_1
+    vals$genes_4 <- input$genes_4
+    vals$ymin_1 <- input$ymin_1
+    vals$ymax_1 <- input$ymax_1
+    vals$ymin_2 <- input$ymin_2
+    vals$ymax_2 <- input$ymax_2
+    vals$ymin_3 <- input$ymin_3
+    vals$ymax_3 <- input$ymax_3
   })
 
   ####################
@@ -269,6 +277,11 @@ server <- function(input, output) {
         label = "Chromosome name:",
         choices = unique(as.character(condition1_data()$Chr))
       ),
+      selectInput(
+        inputId = "genes_1",
+        label = "Gene(s):",
+        choices = unique(as.character(condition1_data()$gene)),
+        multiple = T),
       numericInput(
         inputId = 'start_1',
         label = 'Chromosome start',
@@ -297,8 +310,22 @@ server <- function(input, output) {
       ),
       checkboxInput(
         inputId = "log_scale_1",
-        label = "log2(x)",
+        label = "log10(x)",
         value = TRUE
+      ),
+      numericInput(
+        inputId = 'ymin_1',
+        label = 'ymin',
+        value = 0,
+        min = 0,
+        max = Inf
+      ),
+      numericInput(
+        inputId = 'ymax_1',
+        label = 'ymax',
+        value = NA,
+        min = 0,
+        max = Inf
       ),
       numericInput(
         inputId = 'point_size_1',
@@ -366,8 +393,22 @@ server <- function(input, output) {
       ),
       checkboxInput(
         inputId = "log_scale_2",
-        label = "log2(x)",
+        label = "log10(x)",
         value = TRUE
+      ),
+      numericInput(
+        inputId = 'ymin_2',
+        label = 'ymin',
+        value = 0,
+        min = 0,
+        max = Inf
+      ),
+      numericInput(
+        inputId = 'ymax_2',
+        label = 'ymax',
+        value = NA,
+        min = 0,
+        max = Inf
       ),
       numericInput(
         inputId = 'point_size_2',
@@ -432,8 +473,22 @@ server <- function(input, output) {
       ),
       checkboxInput(
         inputId = "log_scale_3",
-        label = "log2(x)",
+        label = "log10(x)",
         value = TRUE
+      ),
+      numericInput(
+        inputId = 'ymin_3',
+        label = 'ymin',
+        value = 0,
+        min = 0,
+        max = Inf
+      ),
+      numericInput(
+        inputId = 'ymax_3',
+        label = 'ymax',
+        value = NA,
+        min = 0,
+        max = Inf
       ),
       numericInput(
         inputId = 'point_size_3',
@@ -472,6 +527,11 @@ server <- function(input, output) {
         inputId = "chr_4",
         label = "Chromosome name:",
         choices = unique(as.character(condition1_data()$Chr)),
+        multiple = T),
+      selectInput(
+        inputId = "genes_4",
+        label = "Gene(s):",
+        choices = unique(as.character(condition1_data()$gene)),
         multiple = T),
       selectInput(
         inputId = 'feature_4',
@@ -528,9 +588,12 @@ server <- function(input, output) {
       feature = vals$feature_1,
       norm_feature = vals$norm_feature_1,
       log_scale = vals$log_scale_1,
+      ymin = vals$ymin_1,
+      ymax = vals$ymax_1,
       point_size = vals$point_size_1,
       point_color = vals$point_color_1,
-      text_size = vals$text_size_1
+      text_size = vals$text_size_1,
+      genes = input$genes_1
     )
   })
 
@@ -551,9 +614,12 @@ server <- function(input, output) {
        feature = vals$feature_1,
        norm_feature = vals$norm_feature_1,
        log_scale = vals$log_scale_1,
+       ymin = vals$ymin_1,
+       ymax = vals$ymax_1,
        point_size = vals$point_size_1,
        point_color = vals$point_color_2,
-       text_size = vals$text_size_1
+       text_size = vals$text_size_1,
+       genes = input$genes_1
      )
    })
 
@@ -574,6 +640,8 @@ server <- function(input, output) {
        norm_feature = vals$norm_feature_2,
        mean_se = vals$mean_se,
        log_scale = vals$log_scale_2,
+       ymin = vals$ymin_2,
+       ymax = vals$ymax_2,
        point_color_1 = vals$point_color_1,
        point_color_2 = vals$point_color_2,
        point_size = vals$point_size_2,
@@ -596,6 +664,8 @@ server <- function(input, output) {
       feature = vals$feature_3,
       norm_feature = vals$norm_feature_3,
       log_scale = input$log_scale_3,
+      ymin = vals$ymin_3,
+      ymax = vals$ymax_3,
       point_size = vals$point_size_3,
       text_size = vals$text_size_3
     )
@@ -616,6 +686,8 @@ server <- function(input, output) {
       feature = vals$feature_3,
       norm_feature = vals$norm_feature_3,
       log_scale = input$log_scale_3,
+      ymin = vals$ymin_3,
+      ymax = vals$ymax_3,
       point_size = vals$point_size_3,
       text_size = vals$text_size_3
     )
@@ -637,6 +709,8 @@ server <- function(input, output) {
       feature = vals$feature_3,
       norm_feature = vals$norm_feature_3,
       log_scale = input$log_scale_3,
+      ymin = vals$ymin_3,
+      ymax = vals$ymax_3,
       point_size = vals$point_size_3,
       text_size = vals$text_size_3,
       condition1_name = input$condition1_name,
@@ -662,7 +736,8 @@ server <- function(input, output) {
       point_size = vals$point_size_4,
       text_size = vals$text_size_4,
       condition1_name = input$condition1_name,
-      condition2_name = input$condition2_name
+      condition2_name = input$condition2_name,
+      genes = input$genes_4
     )
   })
 

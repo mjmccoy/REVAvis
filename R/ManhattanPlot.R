@@ -7,6 +7,8 @@ ManhattanPlot <- function(
   feature,
   norm_feature = "",
   log_scale = FALSE,
+  ymin,
+  ymax = NULL,
   point_size,
   text_size,
   condition1_name = NULL,
@@ -64,18 +66,18 @@ ManhattanPlot <- function(
       text = element_text(size = text_size))
   if(log_scale){
     g <- g +
-      geom_point(aes(x = Feature, y = log2(y.data), col = Chr, shape = Condition), size = point_size) +
+      geom_point(aes(x = Feature, y = log10(y.data), col = Chr, shape = Condition), size = point_size) +
       ylab(
         ifelse(
           norm_feature == "",
           paste(
-            "log2(",
+            "log10(",
             feature,
             ")",
             sep = ""
           ),
           paste(
-            "log2(",
+            "log10(",
             feature,
             "/",
             norm_feature,
@@ -99,6 +101,7 @@ ManhattanPlot <- function(
         )
       )
   }
+
   if(!is.null(data2)){
     if(norm_feature != ""){
       g <- g + ylab(paste(feature, "/", norm_feature, " (", condition1_name, "/", condition2_name, ")", sep = ""))
@@ -106,5 +109,10 @@ ManhattanPlot <- function(
       g <- g + ylab(paste(feature, " (", condition1_name, "/", condition2_name, ")", sep = ""))
     }
   }
+
+  if(!is.null(ymax)){
+    g <- g + ylim(c(ymin, ymax))
+  }
+
   return(g)
 }

@@ -11,7 +11,9 @@ chromPlot <- function(
   point_size,
   point_color,
   text_size,
-  genes = c("TUBB8", "DIP2C"),
+  genes,
+  ymin,
+  ymax = NULL,
   FeatureFile = TRUE){
 
   if(is.null(data)){
@@ -80,11 +82,15 @@ chromPlot <- function(
     theme(text = element_text(size = text_size)) +
     ggtitle(label = chr)
 
+  if(!is.null(ymax)){
+    g <- g + ylim(c(ymin, ymax))
+  }
+
   if(log_scale){
     g <- g +
       geom_point(
         aes(x = BinStart/1000000,
-            y = log2(y.data),
+            y = log10(y.data),
             shape = Condition),
         size = point_size,
         col = point_color) +
@@ -92,13 +98,13 @@ chromPlot <- function(
         ifelse(
           norm_feature == "",
           paste(
-            "log2(",
+            "log10(",
             feature,
             ")",
             sep = ""
           ),
           paste(
-            "log2(",
+            "log10(",
             feature,
             "/",
             norm_feature,
@@ -128,14 +134,12 @@ chromPlot <- function(
       )
   }
 
-  #genes <- c("PRIM2", "RGPD1")
-
   if(!is.null(genes) & log_scale){
     g <- g + geom_text_repel(
       data = subset(g$data, gene %in% genes),
       aes(
         x = BinStart/1000000,
-        y = log2(y.data),
+        y = log10(y.data),
         label = gene))
   } else if(!is.null(genes) & !log_scale){
     g <- g + geom_text_repel(

@@ -20,6 +20,18 @@ read.input.files <- function(file.list, condition, normalized, FeatureFile = TRU
     data.df[, c((ncol(data.df) - 1), ncol(data.df))] <- NULL
     names(data.df) <- gsub(pattern = "\\__.*", "", names(data.df))
 
+    if(normalized){
+      if(!FeatureFile){
+        for(i in 4:ncol(data.df)){
+          data.df[2:nrow(data.df), i] <- data.df[2:nrow(data.df), i]/(data.df[1, i]/1e6)
+        }
+      } else {
+        for(i in 10:ncol(data.df)){
+          data.df[, i] <- data.df[, i]/(sum(data.df[, i])/1e6)
+        }
+      }
+    }
+
     if(FeatureFile){
       names(data.df)[1] <- "Chr"
       names(data.df)[names(data.df) %in% c("BinStart", "Start")] <- "BinStart"
@@ -34,12 +46,6 @@ read.input.files <- function(file.list, condition, normalized, FeatureFile = TRU
       names(data.df)[1] <- ifelse(names(data.df)[1] == "Chromosome", "Chr", names(data.df)[1])
     }
 
-    # Uncomment to enable normalization.
-    # if(normalized){
-    #   for(i in 4:ncol(data.df)){
-    #     data.df[2:nrow(data.df), i] <- (data.df[2:nrow(data.df), i]*1e6)/data.df[1, i]
-    #   }
-    # }
     upload[[nr]] <- data.df
     names(upload)[[nr]] <- paste(condition, nr, sep = "_")
   }

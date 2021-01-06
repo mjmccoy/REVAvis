@@ -8,6 +8,8 @@ agg_chromPlot <- function(
   norm_feature = "",
   mean_se = FALSE,
   log_scale = NULL,
+  ymin,
+  ymax = NULL,
   point_color_1,
   point_color_2,
   point_size,
@@ -31,18 +33,18 @@ agg_chromPlot <- function(
     data.df$y.data <- data.df$y.data/data.df$y.norm.feature
   }
   if(log_scale){
-    g <- ggplot(subset(data.df, y.data > 0), aes(x = BinStart/1000000, y = log2(y.data), col = group)) +
+    g <- ggplot(subset(data.df, y.data > 0), aes(x = BinStart/1000000, y = log10(y.data), col = group)) +
       ylab(
         ifelse(
           norm_feature == "",
           paste(
-            "log2(",
+            "log10(",
             feature,
             ")",
             sep = ""
           ),
           paste(
-            "log2(",
+            "log10(",
             feature,
             "/",
             norm_feature,
@@ -71,11 +73,17 @@ agg_chromPlot <- function(
     geom_hline(yintercept = 0) +
     scale_color_manual(values = c(point_color_1, point_color_2)) +
     theme_classic()
+
   if(mean_se){
     g <- g + stat_summary()
   } else {
     g <- g + geom_point()
   }
+
+  if(!is.null(ymax)){
+    g <- g + ylim(c(ymin, ymax))
+  }
+
   # ggplotly(g)
   return(g)
 }
