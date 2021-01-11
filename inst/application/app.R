@@ -42,7 +42,7 @@ ui <- navbarPage("REVA Visualization",
                                 inputId = "condition1_name",
                                 label = "Name for Condition 1",
                                 value = "Condition1"),
-                              checkboxInput("condition1_norm", "RPM normalize (for each feature individually, reads/[(total reads)/1e6])", TRUE)
+                              checkboxInput("condition1_norm", "RPM normalize each feature (reads/[(total reads)/1e6])", TRUE)
                             )),
                             # Output Condition 1 file names:
                             column(4,
@@ -67,6 +67,15 @@ ui <- navbarPage("REVA Visualization",
                             # Outout Condition 2 file names:
                             column(4,
                               tableOutput("condition2_files")
+                            )
+                          ),
+                          fluidRow(
+                            column(4, selectInput(
+                              inputId = 'FeatureFile',
+                              label = 'File type',
+                              choices = c("Base by Base", "Positional Summary", "Feature Summary"),
+                              selected = "Feature Summary"
+                              )
                             )
                           ),
                           fluidRow(
@@ -183,7 +192,8 @@ server <- function(input, output) {
     read.input.files(
       file.list = input$condition1_files,
       condition = input$condition1_name,
-      normalized = input$condition1_norm
+      normalized = input$condition1_norm,
+      FeatureFile = input$FeatureFile
     )
   })
   condition2_data <- reactive({
@@ -191,12 +201,15 @@ server <- function(input, output) {
     read.input.files(
       file.list = input$condition2_files,
       condition = input$condition2_name,
-      normalized = input$condition2_norm)
+      normalized = input$condition2_norm,
+      FeatureFile = input$FeatureFile
+    )
   })
 
   # chr and feature values
   vals <- reactiveValues()
   observe({
+    vals$FeatureFile <- input$FeatureFile
     vals$condition1_name <- input$condition1_name
     vals$condition2_name <- input$condition2_name
     vals$chr_1 <- as.factor(input$chr_1)
@@ -593,7 +606,8 @@ server <- function(input, output) {
       point_size = vals$point_size_1,
       point_color = vals$point_color_1,
       text_size = vals$text_size_1,
-      genes = input$genes_1
+      genes = input$genes_1,
+      FeatureFile = input$FeatureFile
     )
   })
 
@@ -619,7 +633,8 @@ server <- function(input, output) {
        point_size = vals$point_size_1,
        point_color = vals$point_color_2,
        text_size = vals$text_size_1,
-       genes = input$genes_1
+       genes = input$genes_1,
+       FeatureFile = input$FeatureFile
      )
    })
 
@@ -737,7 +752,8 @@ server <- function(input, output) {
       text_size = vals$text_size_4,
       condition1_name = input$condition1_name,
       condition2_name = input$condition2_name,
-      genes = input$genes_4
+      genes = input$genes_4,
+      FeatureFile = input$FeatureFile
     )
   })
 

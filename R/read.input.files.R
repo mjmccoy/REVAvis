@@ -1,6 +1,6 @@
 # Function read.input.files reads in REVA output files
 
-read.input.files <- function(file.list, condition, normalized, FeatureFile = TRUE){
+read.input.files <- function(file.list, condition, normalized, FeatureFile){
   upload = list()
   for(nr in 1:length(file.list[, 1])){
     data.df <- read.table(
@@ -21,7 +21,7 @@ read.input.files <- function(file.list, condition, normalized, FeatureFile = TRU
     names(data.df) <- gsub(pattern = "\\__.*", "", names(data.df))
 
     if(normalized){
-      if(!FeatureFile){
+      if(FeatureFile != "Feature Summary"){
         for(i in 4:ncol(data.df)){
           data.df[2:nrow(data.df), i] <- data.df[2:nrow(data.df), i]/(data.df[1, i]/1e6)
         }
@@ -32,7 +32,7 @@ read.input.files <- function(file.list, condition, normalized, FeatureFile = TRU
       }
     }
 
-    if(FeatureFile){
+    if(FeatureFile == "Feature Summary"){
       names(data.df)[1] <- "Chr"
       names(data.df)[names(data.df) %in% c("BinStart", "Start")] <- "BinStart"
       data.df$gene <- sapply(

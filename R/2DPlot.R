@@ -12,8 +12,8 @@ TwoDPlot <- function(
   ymax = NULL,
   point_size,
   text_size,
-  FeatureFile = TRUE,
-  genes = c("TUBB8", "DIP2C")){
+  FeatureFile,
+  genes){
 
   # correlation function
   corr_eqn <- function(x,y, digits = 2) {
@@ -33,7 +33,7 @@ TwoDPlot <- function(
     subset(Chr %in% chr)
 
   # If REVA input is not Feature File format, remove summary of chromosomes
-  if(!FeatureFile){
+  if(FeatureFile != "Feature Summary"){
     data1 <- data1 %>%
       group_by(Condition, Chr) %>%
       filter(duplicated(Chr) | n()==1)
@@ -45,7 +45,7 @@ TwoDPlot <- function(
   # Match data2 feature with data1 feature by Chr and Binstart if not Feature File, and
   # also by gene if Feature File
   data1 <- as.data.frame(data1) %>% rename(data1_feature = feature)
-  if(!FeatureFile){
+  if(FeatureFile != "Feature Summary"){
     data2 <- data2 %>%
       select(data2_feature = feature, BinStart = BinStart, Chr = Chr) %>%
       as.data.frame
@@ -83,7 +83,7 @@ TwoDPlot <- function(
               y = log10(max(data1[names(data1) %in% c("data1_feature", "data2_feature")])),
               label = corr_eqn(data1$data1_feature, data1$data2_feature),
               parse = FALSE)
-  if(FeatureFile){
+  if(FeatureFile == "Feature Summary"){
     g <- g +
       geom_text_repel(
         data = subset(g$data, gene %in% genes),

@@ -14,13 +14,13 @@ chromPlot <- function(
   genes,
   ymin,
   ymax = NULL,
-  FeatureFile = TRUE){
+  FeatureFile){
 
   if(is.null(data)){
     return(NULL)
   }
 
-  if(FeatureFile){
+  if(FeatureFile == "Feature Summary"){
     data.df <- subset(data, Chr %in% chr)
   } else {
     data.df <- subset(data, Chr %in% chr) %>%
