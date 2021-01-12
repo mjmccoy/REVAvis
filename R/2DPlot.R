@@ -67,7 +67,7 @@ TwoDPlot <- function(
       x = log10(data1_feature),
       y = log10(data2_feature)
     )) +
-    geom_point(aes(col = Chr), size = point_size) +
+    geom_point(col = "grey", size = point_size) +
     # geom_point(aes(x = log10(data1_feature), y = log10(data2_feature), col = Chr, text = BinStart)) +
     xlab(paste("log10(", condition1_name, ")", sep = "")) +
     ylab(paste("log10(", condition2_name, ")", sep = "")) +
@@ -85,6 +85,7 @@ TwoDPlot <- function(
               parse = FALSE)
   if(FeatureFile == "Feature Summary"){
     g <- g +
+      geom_point(col = ifelse(g$data$gene %in% genes, "red", "grey"), size = point_size) +
       geom_text_repel(
         data = subset(g$data, gene %in% genes),
         min.segment.length = 0,
