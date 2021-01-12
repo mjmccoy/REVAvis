@@ -73,7 +73,7 @@ ui <- navbarPage("REVA Visualization",
                             column(4, selectInput(
                               inputId = 'FeatureFile',
                               label = 'File type',
-                              choices = c("Base by Base", "Positional Summary", "Feature Summary"),
+                              choices = c("Bin by Bin", "Feature Summary"),
                               selected = "Feature Summary"
                               )
                             )
