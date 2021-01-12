@@ -85,7 +85,16 @@ TwoDPlot <- function(
               parse = FALSE)
   if(FeatureFile == "Feature Summary"){
     g <- g +
-      geom_point(col = ifelse(g$data$gene %in% genes, "red", "grey"), size = point_size) +
+      geom_point(
+        data = subset(g$data, gene %in% genes),
+        col = "red",
+        size = point_size,
+        aes(
+          x = log10(data1_feature),
+          y = log10(data2_feature)
+        )
+      ) +
+        #col = ifelse(g$data$gene %in% genes, "red", "grey"), size = point_size) +
       geom_text_repel(
         data = subset(g$data, gene %in% genes),
         min.segment.length = 0,
