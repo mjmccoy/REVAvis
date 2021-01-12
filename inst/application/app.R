@@ -284,103 +284,198 @@ server <- function(input, output) {
 
   # Render UI
   output$render_ui_1 <- renderUI({
-    list(
-      selectInput(
-        inputId = "chr_1",
-        label = "Chromosome name:",
-        choices = unique(as.character(condition1_data()$Chr))
-      ),
-      selectInput(
-        inputId = "genes_1",
-        label = "Gene(s):",
-        choices = unique(as.character(condition1_data()$gene)),
-        multiple = T),
-      numericInput(
-        inputId = 'start_1',
-        label = 'Chromosome start',
-        #value = min(condition1_data()$BinStart),
-        value = NA,
-        min = 0,
-        max = Inf
-      ),
-      numericInput(
-        inputId = 'end_1',
-        label = 'Chromosome end',
-        #value = max(condition1_data()$BinStart) + max(condition1_data()$BinLength),
-        value = NA,
-        min = 1,
-        max = Inf
-      ),
-      selectInput(
-        inputId = 'feature_1',
-        label = 'Feature',
-        choices = names(condition1_data())[5:(length(names(condition1_data())) - 1)]
-      ),
-      selectInput(
-        inputId = 'norm_feature_1',
-        label = 'Normalization feature',
-        choices = c("", names(condition1_data())[5:(length(names(condition1_data())) - 1)])
-      ),
-      checkboxInput(
-        inputId = "log_scale_1",
-        label = "log10(x)",
-        value = TRUE
-      ),
-      numericInput(
-        inputId = 'ymin_1',
-        label = 'ymin',
-        value = 0,
-        min = 0,
-        max = Inf
-      ),
-      numericInput(
-        inputId = 'ymax_1',
-        label = 'ymax',
-        value = NA,
-        min = 0,
-        max = Inf
-      ),
-      numericInput(
-        inputId = 'point_size_1',
-        label = 'Point size (0.1-10.0)',
-        value = 2,
-        min = 0.1,
-        max = 10
-      ),
-      selectInput(
-        inputId = 'point_color_1',
-        label = 'Condition 1 color',
-        choices = colors(),
-        selected = "red3"
-      ),
-      selectInput(
-        inputId = 'point_color_2',
-        label = 'Condition 2 color',
-        choices = colors(),
-        selected = "black"
-      ),
-      numericInput(
-        inputId = 'text_size_1',
-        label = 'Text size (6-32)',
-        value = 16,
-        min = 6,
-        max = 32
-      ),
-      numericInput(
-        inputId = 'plot_height_1',
-        label = 'Download plot height (in)',
-        value = 3,
-        min = 1,
-        max = 48
-      ),
-      numericInput(
-        inputId = 'plot_width_1',
-        label = 'Download plot width (in)',
-        value = 8,
-        min = 1,
-        max = 48
+    if(vals$FeatureFile == "Feature Summary"){
+      list(
+        selectInput(
+          inputId = "chr_1",
+          label = "Chromosome name:",
+          choices = unique(as.character(condition1_data()$Chr))
+        ),
+        selectInput(
+          inputId = "genes_1",
+          label = "Gene(s):",
+          choices = unique(as.character(condition1_data()$gene)),
+          multiple = T),
+        numericInput(
+          inputId = 'start_1',
+          label = 'Chromosome start',
+          #value = min(condition1_data()$BinStart),
+          value = NA,
+          min = 0,
+          max = Inf
+        ),
+        numericInput(
+          inputId = 'end_1',
+          label = 'Chromosome end',
+          #value = max(condition1_data()$BinStart) + max(condition1_data()$BinLength),
+          value = NA,
+          min = 1,
+          max = Inf
+        ),
+        selectInput(
+          inputId = 'feature_1',
+          label = 'Feature',
+          choices = names(condition1_data())[5:(length(names(condition1_data())) - 1)]
+        ),
+        selectInput(
+          inputId = 'norm_feature_1',
+          label = 'Normalization feature',
+          choices = c("", names(condition1_data())[5:(length(names(condition1_data())) - 1)])
+        ),
+        checkboxInput(
+          inputId = "log_scale_1",
+          label = "log10(x)",
+          value = TRUE
+        ),
+        numericInput(
+          inputId = 'ymin_1',
+          label = 'ymin',
+          value = 0,
+          min = 0,
+          max = Inf
+        ),
+        numericInput(
+          inputId = 'ymax_1',
+          label = 'ymax',
+          value = NA,
+          min = 0,
+          max = Inf
+        ),
+        numericInput(
+          inputId = 'point_size_1',
+          label = 'Point size (0.1-10.0)',
+          value = 2,
+          min = 0.1,
+          max = 10
+        ),
+        selectInput(
+          inputId = 'point_color_1',
+          label = 'Condition 1 color',
+          choices = colors(),
+          selected = "red3"
+        ),
+        selectInput(
+          inputId = 'point_color_2',
+          label = 'Condition 2 color',
+          choices = colors(),
+          selected = "black"
+        ),
+        numericInput(
+          inputId = 'text_size_1',
+          label = 'Text size (6-32)',
+          value = 16,
+          min = 6,
+          max = 32
+        ),
+        numericInput(
+          inputId = 'plot_height_1',
+          label = 'Download plot height (in)',
+          value = 3,
+          min = 1,
+          max = 48
+        ),
+        numericInput(
+          inputId = 'plot_width_1',
+          label = 'Download plot width (in)',
+          value = 8,
+          min = 1,
+          max = 48
+        )
       )
-    )
+    } else {
+      list(
+        selectInput(
+          inputId = "chr_1",
+          label = "Chromosome name:",
+          choices = unique(as.character(condition1_data()$Chr))
+        ),
+        numericInput(
+          inputId = 'start_1',
+          label = 'Chromosome start',
+          #value = min(condition1_data()$BinStart),
+          value = NA,
+          min = 0,
+          max = Inf
+        ),
+        numericInput(
+          inputId = 'end_1',
+          label = 'Chromosome end',
+          #value = max(condition1_data()$BinStart) + max(condition1_data()$BinLength),
+          value = NA,
+          min = 1,
+          max = Inf
+        ),
+        selectInput(
+          inputId = 'feature_1',
+          label = 'Feature',
+          choices = names(condition1_data())[5:(length(names(condition1_data())) - 1)]
+        ),
+        selectInput(
+          inputId = 'norm_feature_1',
+          label = 'Normalization feature',
+          choices = c("", names(condition1_data())[5:(length(names(condition1_data())) - 1)])
+        ),
+        checkboxInput(
+          inputId = "log_scale_1",
+          label = "log10(x)",
+          value = TRUE
+        ),
+        numericInput(
+          inputId = 'ymin_1',
+          label = 'ymin',
+          value = 0,
+          min = 0,
+          max = Inf
+        ),
+        numericInput(
+          inputId = 'ymax_1',
+          label = 'ymax',
+          value = NA,
+          min = 0,
+          max = Inf
+        ),
+        numericInput(
+          inputId = 'point_size_1',
+          label = 'Point size (0.1-10.0)',
+          value = 2,
+          min = 0.1,
+          max = 10
+        ),
+        selectInput(
+          inputId = 'point_color_1',
+          label = 'Condition 1 color',
+          choices = colors(),
+          selected = "red3"
+        ),
+        selectInput(
+          inputId = 'point_color_2',
+          label = 'Condition 2 color',
+          choices = colors(),
+          selected = "black"
+        ),
+        numericInput(
+          inputId = 'text_size_1',
+          label = 'Text size (6-32)',
+          value = 16,
+          min = 6,
+          max = 32
+        ),
+        numericInput(
+          inputId = 'plot_height_1',
+          label = 'Download plot height (in)',
+          value = 3,
+          min = 1,
+          max = 48
+        ),
+        numericInput(
+          inputId = 'plot_width_1',
+          label = 'Download plot width (in)',
+          value = 8,
+          min = 1,
+          max = 48
+        )
+      )
+    }
   })
 
   output$render_ui_2 <- renderUI({
@@ -535,55 +630,102 @@ server <- function(input, output) {
   })
 
   output$render_ui_4 <- renderUI({
-    list(
-      selectInput(
-        inputId = "chr_4",
-        label = "Chromosome name:",
-        choices = unique(as.character(condition1_data()$Chr)),
-        multiple = T),
-      selectInput(
-        inputId = "genes_4",
-        label = "Gene(s):",
-        choices = unique(as.character(condition1_data()$gene)),
-        multiple = T),
-      selectInput(
-        inputId = 'feature_4',
-        label = 'Feature',
-        choices = names(condition1_data())[5:(length(names(condition1_data())) - 1)]),
-      selectInput(
-        inputId = 'norm_feature_4',
-        label = 'Normalization feature',
-        choices = c("", names(condition1_data())[5:(length(names(condition1_data())) - 1)])
-      ),
-      numericInput(
-        inputId = 'point_size_4',
-        label = 'Point size (0.1-10.0)',
-        value = 2,
-        min = 0.1,
-        max = 10
-      ),
-      numericInput(
-        inputId = 'text_size_4',
-        label = 'Text size (6-32)',
-        value = 16,
-        min = 6,
-        max = 32
-      ),
-      numericInput(
-        inputId = 'plot_height_4',
-        label =  'Download plot height (in)',
-        value = 3,
-        min = 1,
-        max = 48
-      ),
-      numericInput(
-        inputId = 'plot_width_4',
-        label =  'Download plot width (in)',
-        value =  8,
-        min = 1,
-        max = 48
+    if(vals$FeatureFile == "Feature Summary"){
+      list(
+        selectInput(
+          inputId = "chr_4",
+          label = "Chromosome name:",
+          choices = unique(as.character(condition1_data()$Chr)),
+          multiple = T),
+        selectInput(
+          inputId = "genes_4",
+          label = "Gene(s):",
+          choices = unique(as.character(condition1_data()$gene)),
+          multiple = T),
+        selectInput(
+          inputId = 'feature_4',
+          label = 'Feature',
+          choices = names(condition1_data())[5:(length(names(condition1_data())) - 1)]),
+        selectInput(
+          inputId = 'norm_feature_4',
+          label = 'Normalization feature',
+          choices = c("", names(condition1_data())[5:(length(names(condition1_data())) - 1)])
+        ),
+        numericInput(
+          inputId = 'point_size_4',
+          label = 'Point size (0.1-10.0)',
+          value = 2,
+          min = 0.1,
+          max = 10
+        ),
+        numericInput(
+          inputId = 'text_size_4',
+          label = 'Text size (6-32)',
+          value = 16,
+          min = 6,
+          max = 32
+        ),
+        numericInput(
+          inputId = 'plot_height_4',
+          label =  'Download plot height (in)',
+          value = 3,
+          min = 1,
+          max = 48
+        ),
+        numericInput(
+          inputId = 'plot_width_4',
+          label =  'Download plot width (in)',
+          value =  8,
+          min = 1,
+          max = 48
+        )
       )
-    )
+    } else {
+      list(
+        selectInput(
+          inputId = "chr_4",
+          label = "Chromosome name:",
+          choices = unique(as.character(condition1_data()$Chr)),
+          multiple = T),
+        selectInput(
+          inputId = 'feature_4',
+          label = 'Feature',
+          choices = names(condition1_data())[5:(length(names(condition1_data())) - 1)]),
+        selectInput(
+          inputId = 'norm_feature_4',
+          label = 'Normalization feature',
+          choices = c("", names(condition1_data())[5:(length(names(condition1_data())) - 1)])
+        ),
+        numericInput(
+          inputId = 'point_size_4',
+          label = 'Point size (0.1-10.0)',
+          value = 2,
+          min = 0.1,
+          max = 10
+        ),
+        numericInput(
+          inputId = 'text_size_4',
+          label = 'Text size (6-32)',
+          value = 16,
+          min = 6,
+          max = 32
+        ),
+        numericInput(
+          inputId = 'plot_height_4',
+          label =  'Download plot height (in)',
+          value = 3,
+          min = 1,
+          max = 48
+        ),
+        numericInput(
+          inputId = 'plot_width_4',
+          label =  'Download plot width (in)',
+          value =  8,
+          min = 1,
+          max = 48
+        )
+      )
+    }
   })
 
   ###########
