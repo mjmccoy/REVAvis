@@ -87,6 +87,7 @@ TwoDPlot <- function(
     g <- g +
       geom_text_repel(
         data = subset(g$data, gene %in% genes),
+        min.segment.length = 0,
         aes(
           x = log10(data1_feature),
           y = log10(data2_feature),

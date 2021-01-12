@@ -137,6 +137,7 @@ chromPlot <- function(
   if(!is.null(genes) & log_scale){
     g <- g + geom_text_repel(
       data = subset(g$data, gene %in% genes),
+      min.segment.length = 0,
       aes(
         x = BinStart/1000000,
         y = log10(y.data),
@@ -144,6 +145,12 @@ chromPlot <- function(
   } else if(!is.null(genes) & !log_scale){
     g <- g + geom_text_repel(
       data = subset(g$data, gene %in% genes),
+      # box.padding = 0.5,
+      # max.overlaps = Inf,
+      # nudge_x = 0.1,
+      # direction = "y",
+      # hjust = "left",
+      min.segment.length = 0,
       aes(
         x = BinStart/1000000,
         y = y.data,
