@@ -14,14 +14,17 @@ agg_chromPlot <- function(
   point_color_2,
   point_size,
   text_size){
+
   if(is.null(data1) || is.null(data2)){
     return(NULL)
   }
+
   data.df <- rbind(data1, data2) %>%
     subset(Chr %in% chr) %>%
     group_by(Condition, Chr) %>%
     filter(duplicated(Chr) | n()==1) %>%
     mutate(group = gsub("\\_.*", "", Condition))
+
   if(norm_feature == ""){
     data.df <- data.df %>%
     select(BinStart = BinStart, y.data = feature, Chr = Chr, Condition = Condition, group = group) %>%
@@ -32,6 +35,7 @@ agg_chromPlot <- function(
       as.data.frame
     data.df$y.data <- data.df$y.data/data.df$y.norm.feature
   }
+
   if(log_scale){
     g <- ggplot(subset(data.df, y.data > 0), aes(x = BinStart/1000000, y = log10(y.data), col = group)) +
       ylab(
@@ -67,6 +71,7 @@ agg_chromPlot <- function(
         )
       )
   }
+
   g <- g +
     xlab("Genomics coordinates (Mb)") +
     theme(panel.border = element_rect(colour = "black", fill = NA, size = 1), text = element_text(size = text_size)) +
