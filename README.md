@@ -27,7 +27,9 @@ git clone https://github.com/mjmccoy/REVAvis.git
 ```
 
 Checkout the correct branch. Here's an example for the 'annotations' branch:
-```git checkout annotations```
+```
+git checkout annotations
+```
 
 If using ssh -X, REVAvis can be run with the following:
 ```
