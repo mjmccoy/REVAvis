@@ -30,4 +30,6 @@ Checkout the correct branch. Here's an example for the 'annotations' branch:
 ```git checkout annotations```
 
 If using ssh -X, REVAvis can be run with the following:
-``` Rscript -e 'library(methods); shiny::runApp("inst/application", launch.browser=TRUE)'```
+```
+Rscript -e 'library(methods); shiny::runApp("inst/application", launch.browser=TRUE)'
+```
