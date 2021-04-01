@@ -26,12 +26,6 @@ Clone REVAvis from GitHub:
 git clone https://github.com/mjmccoy/REVAvis.git
 ```
 
-Alternatively, download REVAvis binary then install from source:
-```
-wget https://github.com/mjmccoy/REVAvis/blob/master/REVAvis_0.0.0.9000_R_x86_64-pc-linux-gnu.tar.gz
-install.packages("REVAvis_0.0.0.9000_R_x86_64-pc-linux-gnu.tar.gz", repos = NULL, type="source")
-```
-
 Checkout the correct branch. Here's an example for the 'annotations' branch:
 ```git checkout annotations```
 
