@@ -26,6 +26,11 @@ Clone REVAvis from GitHub:
 git clone https://github.com/mjmccoy/REVAvis.git
 ```
 
+Navigate to the REVAvis directory:
+```
+cd REVAvis
+```
+
 Checkout the correct branch. Here's an example for the 'annotations' branch:
 ```
 git checkout annotations
