@@ -11,13 +11,13 @@ conda install -c r rstudio
 ```
 Then, in R, install dependencies:
 ```
-install.packages(c("shiny", "waiter", "ggplot2", "dplyr"))
+install.packages(c("shiny", "waiter", "ggplot2", "dplyr", "ggrepel"))
 ```
 
 If (and only if!) there was an error message at the end of this, try the following:
 ```
 install.packages("Rcpp", type = 'source')
-install.packages(c("shiny", "waiter", "ggplot2", "dplyr"))
+install.packages(c("shiny", "waiter", "ggplot2", "dplyr", "ggrepel"))
 ```
 
 ## Install REVAvis
