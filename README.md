@@ -7,7 +7,7 @@ If using conda install, you can install R and Rstudio with the following:
 conda create -n REVAvis
 conda activate REVAvis
 conda install -c r r
-conda install -c r rstudio 
+conda install -c r/label/borked rstudio 
 ```
 Then, in R, install dependencies:
 ```
